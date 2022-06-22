@@ -7,7 +7,7 @@ on:
 # on:
 #     push:
 #         branches:
-#             - feature/actions
+#             - feature/datadog
 
 jobs:
     build:
@@ -22,7 +22,7 @@ jobs:
             - run: npm run lint
             - run: npm test
               env:
-                  DATADOG_ENDPOINT: ${{ secrets.DATADOG_ENDPOINT }}
+                  API_KEY: ${{ secrets.API_KEY }}
 
     publish-npm:
         needs: build
