@@ -1,0 +1,48 @@
+{
+    "name": "tripitaka-datadog",
+    "version": "1.0.1",
+    "description": "",
+    "scripts": {
+        "clean": "rimraf dist",
+        "build": "npm run clean && tsc",
+        "postbuild": "cpy '**/*' '!**/*.ts' '!**/*.tsx' ../dist/ --cwd=src/ --no-overwrite --parents",
+        "test": "jest --coverage",
+        "lint": "eslint . --ext .ts",
+        "prepare": "husky install",
+        "format": "npx prettier --write 'src/**/*.ts' 'test/**/*.ts' '*.js' '*.json' '**/*.yml'"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "husky": "^8.0.1",
+        "tripitaka": "^3.0.3",
+        "typescript": "^4.7.3",
+        "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.18.2",
+        "@babel/preset-typescript": "^7.17.12",
+        "@types/jest": "^28.1.1",
+        "@types/uuid": "^8.3.4",
+        "@typescript-eslint/eslint-plugin": "^5.28.0",
+        "@typescript-eslint/parser": "^5.28.0",
+        "babel-cli": "^6.26.0",
+        "babel-preset-env": "^1.7.0",
+        "cpy": "^9.0.1",
+        "cpy-cli": "^4.1.0",
+        "dotenv": "^16.0.1",
+        "eslint": "^8.17.0",
+        "jest": "^28.1.1",
+        "prettier": "^2.7.1"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pjgrenyer/tripitaka-datadog.git"
+    },
+    "bugs": {
+        "url": "https://github.com/pjgrenyer/tripitaka-datadog/issues"
+    },
+    "homepage": "https://github.com/pjgrenyer/tripitaka-datadog"
+}
