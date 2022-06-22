@@ -1,25 +1,34 @@
 import { Level, Transport } from 'tripitaka';
+import axios from 'axios';
 
 interface DatadogTransportParams {
+    apiKey: string;
+    hostname: string;
+    service: string;
+    ddsource: string;
+    ddtags?: string;
+    intakeRegion: 'us' | 'eu';
+
     threshold?: Level;
 }
 
-const datadogTransport = (params: DatadogTransportParams = {}): Transport => {
-    const { threshold = Level.TRACE } = params;
-  
-    // https://http-intake.logs.datadoghq.eu/v1/input/
-    // https://http-intake.logs.datadoghq.com/v1/input/
-    /*
-        apiKey: 'b7e5c8ec72edf3da0cbb4710e31dac65',
-    hostname: 'pauls-mac',
-    service: 'pg-dd-pod',
-    ddsource: 'nodejs',
-    ddtags: 'foo:bar,boo:baz',
-    intakeRegion: 'eu', // This is the important bit.
-    */
+const datadogTransport = (params: DatadogTransportParams): Transport => {
+    const { apiKey, intakeRegion, hostname, service, ddsource, ddtags, threshold = Level.TRACE } = params;
 
-    return ({ level, record }) => {
-        if (!level.satisfies(threshold)) return;      
+    const queryParams = new URLSearchParams();
+    queryParams.append(hostname, hostname);
+    queryParams.append('service', service);
+    queryParams.append('ddsource', ddsource);
+    if (ddtags) queryParams.append('ddtags', ddtags);
+
+    const url =
+        intakeRegion === 'eu'
+            ? `https://http-intake.logs.datadoghq.eu/v1/input/${apiKey}?${queryParams.toString()}`
+            : `https://http-intake.logs.datadoghq.com/v1/input/${apiKey}?${queryParams.toString()}`;
+
+    return async ({ level, record }) => {
+        if (!level.satisfies(threshold)) return;
+        await axios.post(url, { level: level.name, message: record });
     };
 };
 
