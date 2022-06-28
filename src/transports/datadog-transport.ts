@@ -15,20 +15,23 @@ interface DatadogTransportParams {
 const datadogTransport = (params: DatadogTransportParams): Transport => {
     const { apiKey, intakeRegion, hostname, service, ddsource, ddtags, threshold = Level.TRACE } = params;
 
-    const queryParams = new URLSearchParams();
-    queryParams.append(hostname, hostname);
-    queryParams.append('service', service);
-    queryParams.append('ddsource', ddsource);
-    if (ddtags) queryParams.append('ddtags', ddtags);
-
-    const url =
-        intakeRegion === 'eu'
-            ? `https://http-intake.logs.datadoghq.eu/v1/input/${apiKey}?${queryParams.toString()}`
-            : `https://http-intake.logs.datadoghq.com/v1/input/${apiKey}?${queryParams.toString()}`;
+    const url = intakeRegion === 'eu' ? 'https://http-intake.logs.datadoghq.eu/api/v2/logs' : 'https://http-intake.logs.datadoghq.com/api/v2/logs';
 
     return async ({ level, record }) => {
         if (!level.satisfies(threshold)) return;
-        await axios.post(url, { level: level.name, message: record });
+        await axios.post(
+            url,
+            [
+                {
+                    ddsource: ddsource,
+                    ddtags: ddtags,
+                    hostname: hostname,
+                    message: record,
+                    service: service,
+                },
+            ],
+            { headers: { 'DD-API-KEY': apiKey } }
+        );
     };
 };
 
