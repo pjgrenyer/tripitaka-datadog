@@ -9,6 +9,7 @@ const apiKey = process.env.API_KEY ?? '';
 describe('Transport Datadog', () => {
     it('Smoke test - with tags', () => {
         const logger = new Logger({
+            level: Level.TRACE,
             processors: [datadogProcessor()],
             transports: [
                 datadogTransport({
@@ -18,7 +19,6 @@ describe('Transport Datadog', () => {
                     ddsource: 'nodejs',
                     ddtags: 'foo:bar,boo:baz',
                     intakeRegion: 'eu',
-                    threshold: Level.INFO,
                 }),
                 transports.stream(),
             ],
@@ -28,6 +28,8 @@ describe('Transport Datadog', () => {
             author: "Wu Ch'eng-en",
             ISBN10: '9780140441116',
         };
+        logger.trace('(TRACE) Retrieved book', { book });
+        logger.debug('(DEBUG) Retrieved book', { book });
         logger.info('(INFO) Retrieved book', { book });
         logger.warn('(WARN) Retrieved book', { book });
         logger.error('(ERROR) Retrieved book');
@@ -43,6 +45,7 @@ describe('Transport Datadog', () => {
                     service: 'service',
                     ddsource: 'nodejs',
                     intakeRegion: 'eu',
+                    threshold: Level.INFO,
                 }),
                 transports.stream(),
             ],
