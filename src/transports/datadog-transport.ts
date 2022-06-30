@@ -28,6 +28,7 @@ const datadogTransport = (params: DatadogTransportParams): Transport => {
                     hostname: hostname,
                     message: record,
                     service: service,
+                    level: level.name?.toLowerCase(),
                 },
             ],
             { headers: { 'DD-API-KEY': apiKey } }
