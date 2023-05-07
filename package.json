@@ -1,6 +1,6 @@
 {
     "name": "tripitaka-datadog",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "",
     "scripts": {
         "clean": "rimraf dist",
@@ -15,9 +15,9 @@
     "license": "ISC",
     "dependencies": {
         "axios": "^0.27.2",
-        "husky": "^8.0.1",
-        "tripitaka": "^3.0.3",
-        "typescript": "^4.7.3",
+        "husky": "^8.0.3",
+        "tripitaka": "^3.0.6",
+        "typescript": "^4.9.5",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
