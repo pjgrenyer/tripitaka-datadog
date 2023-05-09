@@ -19,6 +19,8 @@ const datadogTransport = (params: DatadogTransportParams): Transport => {
 
     return async ({ level, record }) => {
         if (!level.satisfies(threshold)) return;
+
+        const obj = JSON.parse(record);
         await axios.post(
             url,
             [
@@ -26,9 +28,10 @@ const datadogTransport = (params: DatadogTransportParams): Transport => {
                     ddsource: ddsource,
                     ddtags: ddtags,
                     hostname: hostname,
-                    message: record,
+                    message: obj.message,
                     service: service,
                     level: level.name?.toLowerCase(),
+                    context: obj.context,
                 },
             ],
             { headers: { 'DD-API-KEY': apiKey } }
