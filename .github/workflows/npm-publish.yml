@@ -18,7 +18,7 @@ jobs:
               with:
                   node-version: '14.x'
             - run: npm install -g npm
-            - run: npm ci
+            - run: HUSKY=0 npm ci
             - run: npm run lint
             - run: npm test
               env:
@@ -34,7 +34,7 @@ jobs:
                   node-version: '14.x'
                   registry-url: https://registry.npmjs.org/
             - run: npm install -g npm
-            - run: npm ci
+            - run: HUSKY=0 npm ci
             - run: npm run build
             - run: npm publish
               env:
