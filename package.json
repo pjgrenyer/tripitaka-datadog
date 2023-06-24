@@ -15,9 +15,7 @@
     "license": "ISC",
     "dependencies": {
         "axios": "^0.27.2",
-        "husky": "^8.0.3",
         "tripitaka": "^3.0.6",
-        "typescript": "^4.9.5",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
@@ -33,8 +31,10 @@
         "cpy-cli": "^4.1.0",
         "dotenv": "^16.0.1",
         "eslint": "^8.17.0",
+        "husky": "^8.0.3",
         "jest": "^28.1.1",
-        "prettier": "^2.7.1"
+        "prettier": "^2.7.1",
+        "typescript": "^5.1.3"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
