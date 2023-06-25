@@ -38,8 +38,22 @@ const datadogTransport = (params: DatadogTransportParams): Transport => {
                 { headers: { 'DD-API-KEY': apiKey } }
             )
             .catch((error) => {
+                const statusCode = error.response?.status;
+                const statusText = error.response?.statusText;
+                const response = error.response?.data ?? error.message;
                 // eslint-disable-next-line no-console
-                console.log(`Failed to log to DataDog: ${error}`);
+                console.log(
+                    `Failed to log to DataDog: ${JSON.stringify(
+                        {
+                            error,
+                            statusCode,
+                            statusText,
+                            response,
+                        },
+                        null,
+                        2
+                    )}`
+                );
             });
     };
 };
