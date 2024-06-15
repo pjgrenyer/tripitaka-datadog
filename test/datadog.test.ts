@@ -23,7 +23,7 @@ const localStorage = augment({
 });
 
 describe('Transport Datadog', () => {
-    it.only('Smoke test - with tags', () => {
+    it('Smoke test - with tags', () => {
         const logger = new Logger({
             level: Level.TRACE,
             processors: [localStorage, context(), timestamp(), datadogProcessor()],
