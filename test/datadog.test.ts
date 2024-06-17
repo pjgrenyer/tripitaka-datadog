@@ -22,20 +22,28 @@ const localStorage = augment({
     },
 });
 
+const onError = (error: any) => {
+    // eslint-disable-next-line no-console
+    console.log(error);
+};
+
 describe('Transport Datadog', () => {
     it('Smoke test - with tags', () => {
         const logger = new Logger({
             level: Level.TRACE,
             processors: [localStorage, context(), timestamp(), datadogProcessor()],
             transports: [
-                datadogTransport({
-                    apiKey: apiKey,
-                    hostname: 'hostname',
-                    service: 'service',
-                    ddsource: 'nodejs',
-                    ddtags: 'foo:bar,boo:baz',
-                    intakeRegion: 'eu',
-                }),
+                datadogTransport(
+                    {
+                        apiKey: apiKey,
+                        hostname: 'hostname',
+                        service: 'service',
+                        ddsource: 'nodejs',
+                        ddtags: 'foo:bar,boo:baz',
+                        intakeRegion: 'eu',
+                    },
+                    onError
+                ),
                 transports.stream(),
             ],
         });
@@ -59,14 +67,43 @@ describe('Transport Datadog', () => {
         const logger = new Logger({
             processors: [datadogProcessor()],
             transports: [
-                datadogTransport({
-                    apiKey: apiKey,
-                    hostname: 'hostname',
-                    service: 'service',
-                    ddsource: 'nodejs',
-                    intakeRegion: 'eu',
-                    threshold: Level.INFO,
-                }),
+                datadogTransport(
+                    {
+                        apiKey: apiKey,
+                        hostname: 'hostname',
+                        service: 'service',
+                        ddsource: 'nodejs',
+                        intakeRegion: 'eu',
+                        threshold: Level.INFO,
+                    },
+                    onError
+                ),
+                transports.stream(),
+            ],
+        });
+        const book = {
+            title: 'Monkey',
+            author: "Wu Ch'eng-en",
+            ISBN10: '9780140441116',
+        };
+        logger.info('(INFO) Retrieved book', { book });
+    });
+
+    it.skip('Smoke test - error handler', () => {
+        const logger = new Logger({
+            processors: [datadogProcessor()],
+            transports: [
+                datadogTransport(
+                    {
+                        apiKey: '',
+                        hostname: 'hostname',
+                        service: 'service',
+                        ddsource: 'nodejs',
+                        intakeRegion: 'eu',
+                        threshold: Level.INFO,
+                    },
+                    onError
+                ),
                 transports.stream(),
             ],
         });

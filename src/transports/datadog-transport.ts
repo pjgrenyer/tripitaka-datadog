@@ -12,7 +12,7 @@ interface DatadogTransportParams {
     threshold?: Level;
 }
 
-const datadogTransport = (params: DatadogTransportParams): Transport => {
+const datadogTransport = (params: DatadogTransportParams, errorCallback: (error: any) => void): Transport => {
     const { apiKey, intakeRegion, hostname, service, ddsource, ddtags, threshold = Level.TRACE } = params;
 
     const url = intakeRegion === 'eu' ? 'https://http-intake.logs.datadoghq.eu/api/v2/logs' : 'https://http-intake.logs.datadoghq.com/api/v2/logs';
@@ -20,22 +20,26 @@ const datadogTransport = (params: DatadogTransportParams): Transport => {
     return async ({ level, record }) => {
         if (!level.satisfies(threshold)) return;
 
-        const obj = JSON.parse(record);
-        await axios.post(
-            url,
-            [
-                {
-                    ddsource: ddsource,
-                    ddtags: ddtags,
-                    hostname: hostname,
-                    message: obj.message,
-                    service: service,
-                    level: level.name?.toLowerCase(),
-                    context: obj.context,
-                },
-            ],
-            { headers: { 'DD-API-KEY': apiKey } }
-        );
+        try {
+            const obj = JSON.parse(record);
+            await axios.post(
+                url,
+                [
+                    {
+                        ddsource: ddsource,
+                        ddtags: ddtags,
+                        hostname: hostname,
+                        message: obj.message,
+                        service: service,
+                        level: level.name?.toLowerCase(),
+                        context: obj.context,
+                    },
+                ],
+                { headers: { 'DD-API-KEY': apiKey } }
+            );
+        } catch (error: any) {
+            errorCallback(error);
+        }
     };
 };
 
