@@ -1,6 +1,6 @@
 {
     "name": "tripitaka-datadog",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "description": "",
     "scripts": {
         "clean": "rimraf dist",
