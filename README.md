@@ -11,8 +11,11 @@ Tripitaka Datadog provides a transport and processor for the [Tripitaka](https:/
 
 ```js
 import { Level, Logger, transports } from 'tripitaka';
-import { datadogTransport } from '../src/transports/datadog-transport';
-import { datadogProcessor } from '../src/processors/datadog-processor';
+import { datadogTransport, datadogProcessor } from 'tripitaka-datadog';
+
+const onError = (error: any) => {
+  // ...
+}
 
  const logger = new Logger({
     processors: [datadogProcessor()],
@@ -25,7 +28,8 @@ import { datadogProcessor } from '../src/processors/datadog-processor';
             ddtags: <tags>,
             intakeRegion: 'eu',
             threshold: Level.INFO,
-        }),
+        },
+        onError),
         transports.stream(),
     ],
 });
